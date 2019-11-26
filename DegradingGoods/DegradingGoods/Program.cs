@@ -7,9 +7,8 @@ using DegradingGoods;
 
 namespace DegradingGoods
 {
-    class Program
+    public class Program
     {
-
         static Item BackstagePassesLogic(Item item) {
 
             if (item.SellIn <= 0) {
@@ -80,22 +79,45 @@ namespace DegradingGoods
                 }
             };
 
-            if (item.QualityValue > 50)
+            if (degradedItem.QualityValue > 50)
             {
-                item.QualityValue = 50;
+                degradedItem.QualityValue = 50;
                 return degradedItem;
             }
-            else if (item.QualityValue < 0)
+            else if (degradedItem.QualityValue < 0)
             {
-                item.QualityValue = 0;
+                degradedItem.QualityValue = 0;
                 return degradedItem;
             }
             else {
                 return degradedItem;
             }                             
         }
-        
-        static void Main(string[] args)
+
+        public static List<Item> LogicMethod(List<Item> items, List<Item> degradedItemList) {
+
+            foreach (var itemListElement in items)
+            {
+                if (itemListElement.Name.ToUpper() == "INVALID ITEM")
+                {
+                    var invalidItem = new Item()
+                    {
+                        Name = "NO SUCH ITEM"
+                    };
+                    degradedItemList.Add(invalidItem);
+                    Console.WriteLine(invalidItem.Name);
+                }
+                else
+                {
+                    var itemToAdd = DegradationMethod(1, itemListElement);
+                    degradedItemList.Add(itemToAdd);
+                    Console.WriteLine(itemToAdd.Name + ' ' + itemToAdd.SellIn + ' ' + itemToAdd.QualityValue);
+                }
+            }
+            return degradedItemList;
+        }
+
+        public static void Main(string[] args)
         {
             // The code provided will print ‘Hello World’ to the console.
             // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
@@ -156,26 +178,8 @@ namespace DegradingGoods
             };
 
             var degradedItemList = new List<Item>();
-                       
-            foreach (var itemListElement in itemList)
-            {
-                if (itemListElement.Name.ToUpper() == "INVALID ITEM")
-                {
-                    var invalidItem = new Item()
-                    {
-                        Name = "NO SUCH ITEM",
-                        SellIn = 0,
-                        QualityValue = 0
-                    };
-                    degradedItemList.Add(invalidItem);
-                    Console.WriteLine(invalidItem.Name);
-                }
-                else {
-                    var itemToAdd = DegradationMethod(1, itemListElement);
-                    degradedItemList.Add(itemToAdd);
-                    Console.WriteLine(itemToAdd.Name + ' ' + itemToAdd.SellIn + ' ' + itemToAdd.QualityValue);
-                }                
-            }
+
+            degradedItemList = LogicMethod(itemList, degradedItemList);
 
             Console.ReadKey();
 
