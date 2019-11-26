@@ -10,6 +10,30 @@ namespace DegradingGoods
     class Program
     {
 
+        static Item BackstagePassesLogic(Item item) {
+
+            if (item.SellIn <= 0) {
+                item.SellIn--;
+                item.QualityValue = 0;
+                return item;
+            }
+            else if (item.SellIn <= 5) {
+                item.SellIn--;
+                item.QualityValue += 3;
+                return item;
+            }
+            else if (item.SellIn <= 10) {
+                item.SellIn--;
+                item.QualityValue += 2;
+                return item;
+            }
+            else {
+                item.SellIn--;
+                item.QualityValue++;
+                return item;
+            };
+        }
+
         static int QualityDegradingLogic(Item item, int currentDegradingAmount) {
 
             if (item.SellIn < 0) {
