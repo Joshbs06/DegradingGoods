@@ -47,37 +47,52 @@ namespace DegradingGoods
 
             var degradeAmount = 0;
             var degradedItem = new Item();
-            degradedItem = item;
+            
             for (var i = 0; i < degradationAmount; i++) {
                 if (item.Name.ToLower() == "aged brie")
                 {
-                    degradeAmount = QualityDegradingLogic(degradedItem, 1);
-                    degradedItem.SellIn = degradedItem.SellIn - 1;
-                    degradedItem.QualityValue = degradedItem.QualityValue + degradeAmount;
+                    degradedItem.Name = item.Name;
+                    degradeAmount = QualityDegradingLogic(item, 1);
+                    degradedItem.SellIn = item.SellIn - 1;
+                    degradedItem.QualityValue = item.QualityValue + degradeAmount;
                 }
                 else if (item.Name.ToLower() == "sulfuras")
                 {
-                    return degradedItem;
+                    return degradedItem = item;
                 }
-                else if (degradedItem.Name.ToLower() == "conjured")
+                else if (item.Name.ToLower() == "conjured")
                 {
-                    degradeAmount = QualityDegradingLogic(degradedItem,-2);
-                    degradedItem.SellIn = degradedItem.SellIn - 1;
-                    degradedItem.QualityValue = degradedItem.QualityValue - degradeAmount;
+                    degradedItem.Name = item.Name;
+                    degradeAmount = QualityDegradingLogic(item,-2);
+                    degradedItem.SellIn = item.SellIn - 1;
+                    degradedItem.QualityValue = item.QualityValue + degradeAmount;
                 }
-                else if (degradedItem.Name.ToLower() == "backstage passes")
+                else if (item.Name.ToLower() == "backstage passes")
                 {
-
+                    degradedItem = BackstagePassesLogic(item);
                 }
                 else
                 {
-                    degradeAmount = QualityDegradingLogic(degradedItem, -1);
-                    degradedItem.SellIn = degradedItem.SellIn - 1;
-                    degradedItem.QualityValue = degradedItem.QualityValue - degradeAmount;
+                    degradedItem.Name = item.Name;
+                    degradeAmount = QualityDegradingLogic(item, -1);
+                    degradedItem.SellIn = item.SellIn - 1;
+                    degradedItem.QualityValue = item.QualityValue + degradeAmount;
                 }
             };
-                               
-            return degradedItem;
+
+            if (item.QualityValue > 50)
+            {
+                item.QualityValue = 50;
+                return degradedItem;
+            }
+            else if (item.QualityValue < 0)
+            {
+                item.QualityValue = 0;
+                return degradedItem;
+            }
+            else {
+                return degradedItem;
+            }                             
         }
         
         static void Main(string[] args)
@@ -97,6 +112,46 @@ namespace DegradingGoods
                     Name = "Aged Brie",
                     SellIn = 1,
                     QualityValue = 1
+                },
+                new Item(){
+                    Name = "Backstage passes",
+                    SellIn = -1,
+                    QualityValue = 2 
+                },
+                new Item(){
+                    Name = "Backstage passes",
+                    SellIn = 9,
+                    QualityValue = 2
+                },
+                new Item(){
+                    Name = "Sulfuras",
+                    SellIn = 2,
+                    QualityValue = 2
+                },
+                new Item(){
+                    Name = "Normal Item",
+                    SellIn = -1,
+                    QualityValue = 55
+                },
+                new Item(){
+                    Name = "Normal Item",
+                    SellIn = 2,
+                    QualityValue = 2
+                },
+                new Item(){
+                    Name = "INVALID ITEM",
+                    SellIn = 2,
+                    QualityValue = 2
+                },
+                new Item(){
+                    Name = "Conjured",
+                    SellIn = 2,
+                    QualityValue = 2
+                },
+                new Item(){
+                    Name = "Conjured",
+                    SellIn = -1,
+                    QualityValue = 5
                 }
             };
 
@@ -115,10 +170,11 @@ namespace DegradingGoods
                     degradedItemList.Add(invalidItem);
                     Console.WriteLine(invalidItem.Name);
                 }
-
-                var itemToAdd = DegradationMethod(1, itemListElement);
-                degradedItemList.Add(itemToAdd);
-                Console.WriteLine(itemToAdd.Name + ' ' + itemToAdd.SellIn + ' ' + itemToAdd.QualityValue);
+                else {
+                    var itemToAdd = DegradationMethod(1, itemListElement);
+                    degradedItemList.Add(itemToAdd);
+                    Console.WriteLine(itemToAdd.Name + ' ' + itemToAdd.SellIn + ' ' + itemToAdd.QualityValue);
+                }                
             }
 
             Console.ReadKey();
